@@ -1,19 +1,44 @@
-[gd_scene load_steps=4 format=3 uid="uid://giy4brsyas5l"]
+[gd_scene load_steps=8 format=3 uid="uid://giy4brsyas5l"]
 
 [ext_resource type="Script" path="res://collectible/collectible.gd" id="1_dwpgy"]
-[ext_resource type="Texture2D" uid="uid://d3ipy71455dvr" path="res://collectible/collectible.png" id="1_ku0xx"]
+[ext_resource type="Texture2D" uid="uid://dje8n50kcb5er" path="res://aseprite/maki1.png" id="2_mnokw"]
+[ext_resource type="Texture2D" uid="uid://bqfe3nntavlwb" path="res://aseprite/maki2.png" id="3_s4vly"]
+[ext_resource type="Texture2D" uid="uid://6p7504lu7ycn" path="res://aseprite/maki3.png" id="4_87yan"]
+[ext_resource type="Texture2D" uid="uid://n6fy73jjwck0" path="res://aseprite/maki4.png" id="5_rhpax"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_u7h7g"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_mnokw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_s4vly")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_87yan")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_rhpax")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_86tf1"]
-size = Vector2(18, 18)
+size = Vector2(16, 16)
 
 [node name="Collectible" type="Area2D"]
+scale = Vector2(2, 2)
 collision_mask = 2
 script = ExtResource("1_dwpgy")
 
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_u7h7g")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_86tf1")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_ku0xx")
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]

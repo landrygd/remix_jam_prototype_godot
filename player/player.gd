@@ -13,6 +13,7 @@ var parts: Array[Vector2] = []
 
 @onready var timer: Timer = $Timer
 @onready var trail: Line2D = $Trail
+@onready var camera = Camera2D.new()
 
 
 func _ready() -> void:
@@ -22,17 +23,29 @@ func _ready() -> void:
 		parts.append(position)
 
 	timer.start()
-
+	add_camera()
 
 func _physics_process(delta: float) -> void:
 	var rotation_dir := Input.get_axis("turn_left", "turn_right")
 	rotation += TURN_SPEED * rotation_dir * delta
 
 	velocity = Vector2.from_angle(rotation) * SPEED
-	move_and_slide()
+	var collision = move_and_collide(velocity * delta)
+
+	if collision:
+		_on_wall_collision()
 
 	_draw_trail()
 
+	# Set AnimatedSprite2D rotation to 0 so that the sprite doesn't rotate.
+	$AnimatedSprite2D.global_rotation = 0
+
+	# Set sprite flip to match the direction depending on the velocity.
+	$AnimatedSprite2D.flip_h = velocity.x < 0
+	
+# Stop the player when it collides with a wall.
+func _on_wall_collision() -> void:
+	velocity = -velocity
 
 func _draw_trail() -> void:
 	length = roundi(timer.time_left / timer.wait_time * MAX_LENGTH)
@@ -57,3 +70,9 @@ func _on_collectible_detector_area_entered(area: Area2D) -> void:
 func _on_timer_timeout() -> void:
 	game_over.emit()
 	queue_free()
+
+func add_camera() -> void:
+	# Add the camera as a child of the player
+	add_child(camera)
+	# Make the camera the current one
+	camera.make_current()

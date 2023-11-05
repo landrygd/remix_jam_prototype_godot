@@ -1,15 +1,40 @@
-[gd_scene load_steps=3 format=3 uid="uid://bf60ky8mxndhg"]
+[gd_scene load_steps=7 format=3 uid="uid://bf60ky8mxndhg"]
 
 [ext_resource type="Script" path="res://player/player.gd" id="1_m4amp"]
+[ext_resource type="Texture2D" uid="uid://b7fpd54v14jmt" path="res://aseprite/player1.png" id="2_uru72"]
+[ext_resource type="Texture2D" uid="uid://bitukcmt0mju5" path="res://aseprite/player2.png" id="3_1j0uq"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_biaik"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qynor"]
-radius = 16.0
+radius = 9.05539
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0vk4h"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_uru72")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_1j0uq")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="Player" type="CharacterBody2D"]
+scale = Vector2(2, 2)
 motion_mode = 1
 script = ExtResource("1_m4amp")
 
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_biaik")
+debug_color = Color(0.0705882, 0.592157, 0.72549, 0.419608)
+
 [node name="Trail" type="Line2D" parent="."]
+z_index = -1
+points = PackedVector2Array(0, 4)
 width = 16.0
 default_color = Color(0.996078, 0.992157, 0.682353, 1)
 begin_cap_mode = 1
@@ -20,10 +45,16 @@ collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CollectibleDetector"]
 shape = SubResource("CircleShape2D_qynor")
+debug_color = Color(0.901961, 0.266667, 0.4, 0.419608)
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 4.0
 one_shot = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_0vk4h")
+frame_progress = 0.630646
 
 [connection signal="area_entered" from="CollectibleDetector" to="." method="_on_collectible_detector_area_entered"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
