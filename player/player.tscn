@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://bf60ky8mxndhg"]
+
+[ext_resource type="Script" path="res://player/player.gd" id="1_m4amp"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qynor"]
+radius = 16.0
+
+[node name="Player" type="CharacterBody2D"]
+motion_mode = 1
+script = ExtResource("1_m4amp")
+
+[node name="Trail" type="Line2D" parent="."]
+width = 16.0
+default_color = Color(0.996078, 0.992157, 0.682353, 1)
+begin_cap_mode = 1
+end_cap_mode = 1
+
+[node name="CollectibleDetector" type="Area2D" parent="."]
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollectibleDetector"]
+shape = SubResource("CircleShape2D_qynor")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 4.0
+one_shot = true
+
+[connection signal="area_entered" from="CollectibleDetector" to="." method="_on_collectible_detector_area_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
